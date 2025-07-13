@@ -33,10 +33,11 @@ function Calculator() {
                 {buttonConfigs.map((data) => {
                     return(
                         <>
-                            <input
+                            <CalculatorButton
                                 type="button"
                                 className={data.className}
                                 value={data.value}
+                                onClick={data.onClick}
                             />
                         </>
                     )
