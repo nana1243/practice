@@ -1,27 +1,46 @@
 import React from 'react';
 
-function Calculator(props) {
+function Calculator() {
+    const handleButtonClear = () => {}
+    const handleOperatorClick = (operator) => {}
+    const handleNumberClick = (number) =>{}
+
+    const buttonConfigs = [
+        {value:"C", className: "clear" , onClick: handleButtonClear},
+        {value:"/", className: "operator" , onClick: handleOperatorClick},
+        {value:"1", className: "" , onClick: handleNumberClick},
+        {value:"2", className: "" , onClick: handleNumberClick},
+        {value:"3", className: "" , onClick: handleNumberClick},
+        {value:"*", className: "operator" , onClick: handleOperatorClick},
+        {value:"4", className: "" , onClick: handleNumberClick},
+        {value:"5", className: "" , onClick: handleNumberClick},
+        {value:"6", className: "" , onClick: handleNumberClick},
+        {value:"+", className: "operator" , onClick: handleOperatorClick},
+        {value:"7", className: "" , onClick: handleNumberClick},
+        {value:"8", className: "" , onClick: handleNumberClick},
+        {value:"9", className: "" , onClick: handleNumberClick},
+        {value:"-", className: "operator" , onClick: handleOperatorClick},
+        {value:".", className: "dot" , onClick: handleOperatorClick},
+        {value:".", className: "operator result" , onClick: handleOperatorClick},
+
+    ]
+
+
     return (
         <article className="calculator">
             <form name="forms">
                 <input type="text" name="output" readOnly />
-                <input type="button" className="clear" value="C"/>
-                <input type="button" className="operator" value="/"/>
-                <input type="button" value="1"/>
-                <input type="button" value="2"/>
-                <input type="button" value="3"/>
-                <input type="button" className="operator" value="*"/>
-                <input type="button" value="4"/>
-                <input type="button" value="5"/>
-                <input type="button" value="6"/>
-                <input type="button" className="operator" value="+"/>
-                <input type="button" value="7"/>
-                <input type="button" value="8"/>
-                <input type="button" value="9"/>
-                <input type="button" className="operator" value="-"/>
-                <input type="button" className="dot" value="."/>
-                <input type="button" value="0"/>
-                <input type="button" className="operator result" value="="/>
+                {buttonConfigs.map((data) => {
+                    return(
+                        <>
+                            <input
+                                type="button"
+                                className={data.className}
+                                value={data.value}
+                            />
+                        </>
+                    )
+                })}
             </form>
         </article>
     );
