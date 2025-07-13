@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+.body {
+    @apply bg-[#1f1f1f] flex justify-center items-center h-[100vh];
+}
+
+.bg-public-tail {
+    @apply bg-[url('/fruit.jpg')] w-[600px] h-[600px];
+}
+
+.bg-assets-tail{
+    @apply bg-[url('../assets/images/fruit.jpg')] w-[600px] h-[600px];
+}
+
+
+@layer components {
+    .calculator {
+        @apply size-282 border border-solid border-[#333] bg-[#ccc] p-[4px];
+    }
+
+    .calculator form {
+        @apply grid grid-cols-[repeat(4,65px)] auto-rows-[65px] gap-1;
+    }
+
+    .calculator form input {
+        @apply border-2 border-solid border-[#333] cursor-pointer text-lg;
+    }
+
+    .calculator form input:hover {
+        @apply shadow-[1px_1px_2px_#333];
+    }
+
+    .calculator form input[type="text"] {
+        @apply col-span-4 text-right px-[10px];
+    }
+
+    .calculator form .clear {
+        @apply bg-red-500 col-span-3;
+    }
+
+    .calculator form .operator {
+        @apply bg-orange-500;
+    }
+
+    .calculator form .dot {
+        @apply bg-green-500;
+    }
+
+    .calculator form .result {
+        @apply col-span-2;
+    }
+}
