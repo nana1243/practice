@@ -1,11 +1,13 @@
 import React from 'react';
 
+import CalculatorButton from "./CalculatorButton";
+
 function Calculator() {
     const handleButtonClear = () => {}
     const handleOperatorClick = (operator) => {}
     const handleNumberClick = (number) =>{}
 
-    const buttonConfigs = [
+    const buttonConfigs : ButtonConfig[] = [
         {value:"C", className: "clear" , onClick: handleButtonClear},
         {value:"/", className: "operator" , onClick: handleOperatorClick},
         {value:"1", className: "" , onClick: handleNumberClick},

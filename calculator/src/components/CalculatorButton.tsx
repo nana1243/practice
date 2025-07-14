@@ -13,7 +13,7 @@ function CalculatorButton(props: CalculatorButtonProps) {
     return (
         <>
             <input
-                type="button"
+                type={type}
                 className={className}
                 value={value}
                 onClick={onClick}
