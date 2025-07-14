@@ -1,11 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import CalculatorButton from "./CalculatorButton";
 
 function Calculator() {
+    const [calculatorState, setCalculatorState] = useState<CalculatorState>({
+        currentNumber : '0',
+        previousNumber : '',
+        operation : '',
+        isNewNumber : true,
+    })
+
+
     const handleButtonClear = () => {}
     const handleOperatorClick = (operator) => {}
-    const handleNumberClick = (number) =>{}
+    const handleNumberClick = (event) =>{
+        const value = event.target.value;
+        setCalculatorState((prevState) => {
+            const { currentNumber, isNewNumber } = prevState;
+            return {
+                ...prevState,
+                currentNumber: isNewNumber ? value : currentNumber + value,
+                isNewNumber: false,
+            };
+        });
+    }
 
     const buttonConfigs : ButtonConfig[] = [
         {value:"C", className: "clear" , onClick: handleButtonClear},
@@ -31,7 +49,7 @@ function Calculator() {
     return (
         <article className="calculator">
             <form name="forms">
-                <input type="text" name="output" readOnly />
+                <input type="text" name="output" value={calculatorState.currentNumber} readOnly />
                 {buttonConfigs.map((data) => {
                     return(
                         <>

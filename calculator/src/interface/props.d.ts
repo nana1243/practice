@@ -6,4 +6,9 @@ interface ButtonConfig  {
     onClick : (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-
+interface CalculatorState {
+    currentValue: string;
+    previousValue: string;
+    operation: string;
+    isNewNumber: boolean;
+}
