@@ -10,9 +10,57 @@ function Calculator() {
         isNewNumber : true,
     })
 
+    const operate = (previousNumber, currentNumber, operation) => {
+        switch (operation) {
+            case '+':
+                return Number(previousNumber) + Number(currentNumber);
+            case '-':
+                return Number(previousNumber) - Number(currentNumber);
+            case '*':
+                return Number(previousNumber) * Number(currentNumber);
+            case '/':
+                return Number(previousNumber) / Number(currentNumber);
+            case '=':
+                return currentNumber;
+            case 'C':
+                return '0';
+            default:
+                return currentNumber;
+
+        }
+    }
 
     const handleButtonClear = () => {}
-    const handleOperatorClick = (operator) => {}
+    const handleOperatorClick = (event) => {
+        const value = event.target.value;
+        setCalculatorState((prevState) => {
+            const { currentNumber, previousNumber, operation, isNewNumber } = prevState;
+            if (isNewNumber && operation) {
+                return {
+                    ...prevState,
+                    operation: value,
+                };
+            }
+            if (previousNumber && operation) {
+                const result = operate(previousNumber, currentNumber, operation);
+                return {
+                    currentNumber: String(result),
+                    previousNumber: String(result),
+                    operation: value,
+                    isNewNumber: true,
+                };
+            }
+            return {
+                ...prevState,
+                previousNumber: currentNumber,
+                operation: value,
+                isNewNumber: true,
+            };
+        });
+
+
+
+    }
     const handleNumberClick = (event) =>{
         const value = event.target.value;
         setCalculatorState((prevState) => {
@@ -41,7 +89,7 @@ function Calculator() {
         {value:"9", className: "" , onClick: handleNumberClick},
         {value:"-", className: "operator" , onClick: handleOperatorClick},
         {value:".", className: "dot" , onClick: handleOperatorClick},
-        {value:".", className: "operator result" , onClick: handleOperatorClick},
+        {value:"=", className: "operator result" , onClick: handleOperatorClick},
 
     ]
 
