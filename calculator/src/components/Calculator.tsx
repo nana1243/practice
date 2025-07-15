@@ -13,32 +13,42 @@ function Calculator() {
     const operate = (previousNumber, currentNumber, operation) => {
         switch (operation) {
             case '+':
-                return Number(previousNumber) + Number(currentNumber);
+                return parseFloat(previousNumber) + parseFloat(currentNumber);
             case '-':
-                return Number(previousNumber) - Number(currentNumber);
+                return parseFloat(previousNumber) - parseFloat(currentNumber);
             case '*':
-                return Number(previousNumber) * Number(currentNumber);
+                return parseFloat(previousNumber) * parseFloat(currentNumber);
             case '/':
-                return Number(previousNumber) / Number(currentNumber);
+                return parseFloat(previousNumber) / parseFloat(currentNumber);
             case '=':
                 return currentNumber;
-            case 'C':
-                return '0';
             default:
                 return currentNumber;
 
         }
     }
 
-    const handleButtonClear = () => {}
+    const handleButtonClear = (event) => {
+        setCalculatorState({
+            currentNumber: '0',
+            previousNumber: '',
+            operation: '',
+            isNewNumber: true,
+        });
+    }
+    const handleDot = () => {
+
+    }
+
     const handleOperatorClick = (event) => {
         const value = event.target.value;
         setCalculatorState((prevState) => {
             const { currentNumber, previousNumber, operation, isNewNumber } = prevState;
+            console.log('isNewNumber:', isNewNumber);
             if (isNewNumber && operation) {
                 return {
                     ...prevState,
-                    operation: value,
+                    currentNumber: value === '.' ? '0.' : value,
                 };
             }
             if (previousNumber && operation) {
