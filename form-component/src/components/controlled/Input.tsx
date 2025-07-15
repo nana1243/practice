@@ -1,8 +1,13 @@
 import React from 'react';
 
 function Input() {
-    const [input, setInput] = React.useState<string>('Controlled Input');
+    const [input, setInput] = React.useState<string>('');
     const [pwd , setPwd] = React.useState<string>('');
+
+    const [formState, setFormState] = React.useState({
+        email: '',
+        pwd : ''
+    });
 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,15 +18,21 @@ function Input() {
     }
 
 
-
+    const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormState(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
 
     return (
         <>
-            <h1>Input Component</h1>
+            <h1>Input Component : {formState.email} / {formState.pwd}</h1>
 
             <form>
-                <input type="text" name="email" value={input}  onChange={handleChange}/>
-                <input type="password" value={pwd}  onChange={handlePwdChange}/>
+                <input type="text" name="email" value={formState.email}  onChange={handleFormChange}/>
+                <input type="password" name="pwd" value={formState.pwd}  onChange={handleFormChange}/>
             </form>
 
         </>
