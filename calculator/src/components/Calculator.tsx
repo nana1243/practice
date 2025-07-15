@@ -36,19 +36,29 @@ function Calculator() {
             isNewNumber: true,
         });
     }
-    const handleDot = () => {
+
+    const handleDot = (event) => {
+        if (calculatorState.currentNumber.includes('.')) {
+            return; // 소숫점이 이미 있는 경우 아무 작업도 하지 않음
+        }
+        setCalculatorState((prevState) => ({
+            ...prevState,
+            currentNumber: prevState.currentNumber + '.' ,
+            isNewNumber: false,
+        }));
 
     }
 
     const handleOperatorClick = (event) => {
         const value = event.target.value;
+        console.log('this is value',value);
         setCalculatorState((prevState) => {
             const { currentNumber, previousNumber, operation, isNewNumber } = prevState;
             console.log('isNewNumber:', isNewNumber);
             if (isNewNumber && operation) {
                 return {
                     ...prevState,
-                    currentNumber: value === '.' ? '0.' : value,
+                    operation: value,
                 };
             }
             if (previousNumber && operation) {
@@ -98,7 +108,7 @@ function Calculator() {
         {value:"8", className: "" , onClick: handleNumberClick},
         {value:"9", className: "" , onClick: handleNumberClick},
         {value:"-", className: "operator" , onClick: handleOperatorClick},
-        {value:".", className: "dot" , onClick: handleOperatorClick},
+        {value:".", className: "dot" , onClick: handleDot},
         {value:"=", className: "operator result" , onClick: handleOperatorClick},
 
     ]
