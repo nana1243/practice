@@ -13,7 +13,8 @@ function UserInfo() {
         skills: [],
         bio: ''
     });
-    const skill = ['Javascrpt', 'React', 'Node.js']
+    const skill = ['Javascrpt', 'React', 'Node.js'];
+    const gender = ['Male', 'Female']
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -53,7 +54,7 @@ function UserInfo() {
                 onChange={handleChange}
             />
             <p>Gender</p>
-            {['Female','Male'].map(data=> {
+            {gender.map(data=> {
                 return(
                     <>
                         <InputRadio
