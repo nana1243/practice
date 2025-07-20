@@ -1,10 +1,33 @@
 import React from 'react';
 import userInput from "../../hooks/userInput";
 
+
+
 function UserInfo() {
-    const {value: email, handleValueChange: handleEmailChange} = userInput('');
-    const {value: pwd, handleValueChange: handlePwdChange} = userInput('');
-    const {value: name, handleValueChange: handleNameChange} = userInput('');
+    const validateEmail = (email: string) => {
+        if(!email) {
+            return 'Email is required';
+        }
+        if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+            return 'Invalid gmail format';
+        }
+    }
+
+    const {value: email, handleValueChange: handleEmailChange} = userInput({
+        initialValue: '',
+        customValidationFunction: validateEmail
+    });
+    const {value: pwd, handleValueChange: handlePwdChange} = userInput(
+    {
+            initialValue: '',
+            customValidationFunction: validateEmail
+
+        }
+    );
+    const {value: name, handleValueChange: handleNameChange} = userInput({
+        initialValue: '',
+        customValidationFunction: validateEmail
+    });
 
     const inputs = [
         { id:'email', value: email, onChange: handleEmailChange, placeholder: 'Enter your email' },
@@ -21,15 +44,6 @@ function UserInfo() {
             return;
         }
         console.log({email, pwd, name })
-    }
-
-    const validateEmail = (email: string) => {
-        if(!email) {
-            return 'Email is required';
-        }
-        if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-            return 'Invalid gmail format';
-        }
     }
 
     return (
