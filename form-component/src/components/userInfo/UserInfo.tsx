@@ -7,14 +7,29 @@ function UserInfo() {
     const {value: name, handleValueChange: handleNameChange} = userInput('');
 
     const inputs = [
-        { value: email, onChange: handleEmailChange, placeholder: 'Enter your email' },
-        { value: pwd, onChange: handlePwdChange, placeholder: 'Enter your password' },
-        { value: name, onChange: handleNameChange, placeholder: 'Enter your name' }
+        { id:'email', value: email, onChange: handleEmailChange, placeholder: 'Enter your email' },
+        { id:'pwd', value: pwd, onChange: handlePwdChange, placeholder: 'Enter your password' },
+        { id:'name', value: name, onChange: handleNameChange, placeholder: 'Enter your name' }
     ]
+    const SAFE_GMAIL_REGEX_STRING = "^[a-z0-9._%+-]+@gmail\\.com$"; // 실제 JS 문자열 리터럴
 
-    const handleSubmit = (e:React.FormEvent<HTMLInputElement>) => {
+    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const emailError = validateEmail(email);
+        if(emailError){
+            alert(emailError);
+            return;
+        }
         console.log({email, pwd, name })
+    }
+
+    const validateEmail = (email: string) => {
+        if(!email) {
+            return 'Email is required';
+        }
+        if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+            return 'Invalid gmail format';
+        }
     }
 
     return (
@@ -30,7 +45,7 @@ function UserInfo() {
                         required
                         minLength={4}
                         maxLength={20}
-                    />
+                        pattern={data.id === 'email' ? SAFE_GMAIL_REGEX_STRING : undefined}                    />
                 )}
                 <button type="submit">Submit</button>
             </form>
