@@ -19,16 +19,21 @@ function UserInfo() {
 
     return (
         <>
-            {inputs.map((data, index) =>
-                <input
-                    key={index}
-                    type="text"
-                    value={data.value}
-                    onChange={data.onChange}
-                    placeholder={data.placeholder}
-                />
-            )}
-            <button onClick={handleSubmit}>Submit</button>
+            <form onSubmit={handleSubmit}>
+                {inputs.map((data, index) =>
+                    <input
+                        key={index}
+                        type="text"
+                        value={data.value}
+                        onChange={data.onChange}
+                        placeholder={data.placeholder}
+                        required
+                        minLength={4}
+                        maxLength={20}
+                    />
+                )}
+                <button type="submit">Submit</button>
+            </form>
         </>
     );
 }
