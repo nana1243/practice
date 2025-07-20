@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@layer components {
+    .user-info {
+        @apply max-w-sm mx-auto p-5 bg-gray-100 rounded-lg border border-gray-300 shadow-md;
+    }
+
+    .user-info__title {
+        @apply text-center font-sans text-gray-800 mb-5 text-2xl;
+    }
+
+    .user-info__form {
+        @apply w-full;
+    }
+
+    .form-group {
+        @apply mb-4;
+    }
+
+    .form-group__label {
+        @apply block text-base font-bold text-gray-800 mb-1;
+    }
+
+    .form-group__input,
+    .form-group__textarea {
+        @apply w-full p-2.5 text-base border border-gray-300 rounded focus:border-blue-500 focus:outline-none;
+    }
+    .form-group__textarea {
+        @apply h-24;
+    }
+
+    .form-group--radio .form-group__radio,
+    .form-group--checkbox .form-group__checkbox {
+        @apply inline-block mr-2.5;
+    }
+
+    .form-group__input[type="radio"],
+    .form-group__input[type="checkbox"] {
+        @apply mr-1;
+    }
+
+    .user-info__submit {
+        @apply w-full p-3 text-base bg-blue-500 text-white rounded cursor-pointer transition-colors duration-300 hover:bg-blue-700;
+    }
+
+    .preview {
+        @apply mt-5 p-5 border border-gray-300 rounded bg-gray-100;
+    }
+
+    .preview__title {
+        @apply text-center font-sans text-xl text-gray-800;
+    }
+
+    .preview__item {
+        @apply text-base text-gray-600 text-left mb-1;
+    }
+}
+
+@media (max-width: 768px) {
+    @layer components {
+        .user-info {
+            @apply p-4;
+        }
+
+        .user-info__title {
+            @apply text-lg;
+        }
+
+        .user-info__submit {
+            @apply text-sm;
+        }
+    }
+}
