@@ -1,5 +1,5 @@
 import './App.css'
-import UserInfo from "./assets/components/UserInfo";
+import UserInfo from "./components/UserInfo";
 
 function App() {
 
