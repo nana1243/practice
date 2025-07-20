@@ -1,11 +1,17 @@
-import React, {useRef} from 'react';
+import React, {Ref, useRef} from 'react';
 
-function Input() {
-    const inputRef = useRef<HTMLInputElement>(null);
+interface InputProps {
+    inputRef: Ref<HTMLInputElement>;
+}
+
+function Input(props:InputProps) {
+    const { inputRef } = props;
+
+    // const inputRef = useRef<HTMLInputElement>(null);
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior
-        if (inputRef.current) {
-            console.log(inputRef.current.value);
+        if (inputRef?.current) {
+            console.log(inputRef?.current.value);
         }
     }
 
