@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
+@utility font-inter {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+
 @layer components {
+    .input-field {
+        @apply font-inter w-full h-11 rounded-lg text-sm px-4 border border-[#4F4F4F]  placeholder:text-[#acacac];
+    }
+
     .user-info {
         @apply max-w-sm mx-auto p-5 bg-gray-100 rounded-lg border border-gray-300 shadow-md;
     }
