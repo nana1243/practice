@@ -1,6 +1,6 @@
 import React from 'react';
 import SvgPencil from "./svg/SvgPencil";
-import SvgNo from "./svg/SvgNo";
+import SvgClose from "./svg/SvgClose";
 
 function TodoList(props) {
     return (
@@ -39,7 +39,7 @@ function TodoList(props) {
                             <SvgPencil/>
                         </button>
                         <button className="todo__action-button">
-                            <SvgNo/>
+                            <SvgClose/>
                         </button>
                     </div>
                 </li>
@@ -55,7 +55,7 @@ function TodoList(props) {
                             <SvgPencil/>
                         </button>
                         <button className="todo__action-button">
-                            <SvgNo/>
+                            <SvgClose/>
                         </button>
                     </div>
                 </li>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function SvgNo() {
+function SvgClose() {
     return (
         <>
             <svg
@@ -25,4 +25,4 @@ function SvgNo() {
     );
 }
 
-export default SvgNo;
+export default SvgClose;
