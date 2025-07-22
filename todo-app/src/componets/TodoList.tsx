@@ -7,12 +7,21 @@ import Input from "./html/Input";
 import TodoListItem from "./TodoListItem";
 import TodoListEmpty from "./TodoListEmpty";
 
-function TodoList(props) {
+interface TodoListProps {
+    todos?: Todo[];
+}
+
+function TodoList(props: TodoListProps) {
+    const { todos = [] } = props;
+
     return (
         <>
             <ul className="todo__list">
-                <TodoListEmpty/>
-                <TodoListItem/>
+                {todos.length === 0 && <TodoListEmpty/>}
+                {todos.map((todo) => (
+                    <TodoListItem key={todo.id} todo={todo}/>
+                ))}
+
             </ul>
 
         </>

@@ -22,7 +22,7 @@ function Todo(props) {
         <div className="todo">
             <TodoHeader/>
             <TodoEditor addTodo={addTodo}/>
-            <TodoList/>
+            <TodoList todos={todos}/>
         </div>
     );
 }
