@@ -1,16 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Input from "./html/Input";
 import Button from "./html/Button";
 
-function TodoEditor(props) {
+interface TodoEditorProps {
+    addTodo: (text: string) => void;
+}
+
+function TodoEditor(props:TodoEditorProps) {
+    const { addTodo } = props;
+    const [text, setText] = useState<string>('');
+
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setText(event.target.value);
+    }
+
+    const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if(!text.trim() === ''){
+            addTodo(text);
+        }
+
+    }
+
+
     return (
         <>
-            <form className="todo__form">
+            <form className="todo__form" onSubmit={handleOnSubmit}>
                 <div className="todo__editor">
                     <Input
                         type="text"
                         className="todo__input"
                         placeholder="Enter Todo List"
+                        value={text}
+                        onChange={handleOnChange}
                     />
                     <Button className="todo__button" type="submit">Add</Button>
                 </div>
