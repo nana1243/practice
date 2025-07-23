@@ -16,10 +16,8 @@ function TodoEditor(props:TodoEditorProps) {
 
     const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if(!text.trim() === ''){
-            addTodo(text);
-        }
-
+        addTodo(text);
+        setText('');  // Clear the input field after adding the todo
     }
 
 
