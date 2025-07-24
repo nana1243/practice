@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useId} from 'react';
 
 type CheckBoxProps = React.ComponentProps<'input'> & {
     type?: 'checkbox';
@@ -7,12 +7,13 @@ type CheckBoxProps = React.ComponentProps<'input'> & {
 
 function CheckBox(props:CheckBoxProps){
     const {parentClassName, children , ...rest } = props;
+    const uuid = useId();
 
     return (
         <>
             <div className={parentClassName}>
-                <input {...rest} />
-                <label>{children}</label>
+                <input id={uuid} {...rest} />
+                <label htmlFor={uuid}>{children}</label>
             </div>
 
         </>
