@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import { Pause, Play, RotateCcw } from "lucide-react";
+import React from 'react';
+import { Pause, Play } from "lucide-react";
+import {twMerge} from "tailwind-merge";
 
 interface ControlButtonProps {
     isRunning: boolean;
@@ -11,13 +12,11 @@ function ControlButton(props : ControlButtonProps) {
 
     return (
         <>
-        {/* 시작중 - "bg-red-500 hover:bg-red-600" */}
-            {/* 정지중 - "bg-green-500 hover:bg-green-600" */}
             <button
-                className={`p-3 rounded-full transition-colors bg-green-500 hover:bg-green-600 text-white`}
+                className={twMerge(`p-3 rounded-full transition-colors`, isRunning ? `bg-red-500 hover:bg-red-600` : `bg-green-500 hover:bg-green-600`, `text-white`)}
                 onClick={handleClick}
             >
-                {isRunning ? <Play size={24}/> : <Pause size={24} />}
+                {!isRunning ? <Play size={24}/> : <Pause size={24} />}
             </button>
         </>
     );
