@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import { Pause, Play, RotateCcw } from "lucide-react";
 
-function ControlButton(props) {
-    const [isRunning, setIsRunning] = useState(false);
+interface ControlButtonProps {
+    isRunning: boolean;
+    handleClick: () => void;
+}
 
-    const handleClick = () => {
-        setIsRunning(!isRunning);
-    };
+function ControlButton(props : ControlButtonProps) {
+    const {isRunning, handleClick } = props;
 
     return (
         <>
-            {/* 시작중 - "bg-red-500 hover:bg-red-600" */}
+        {/* 시작중 - "bg-red-500 hover:bg-red-600" */}
             {/* 정지중 - "bg-green-500 hover:bg-green-600" */}
             <button
                 className={`p-3 rounded-full transition-colors bg-green-500 hover:bg-green-600 text-white`}
