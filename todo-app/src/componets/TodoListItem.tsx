@@ -3,7 +3,6 @@ import CheckBox from "./html/CheckBox";
 import Button from "./html/Button";
 import SvgPencil from "./svg/SvgPencil";
 import SvgClose from "./svg/SvgClose";
-import Input from "./html/Input";
 
 interface TodoListItemProps {
     todo : Todo
@@ -13,6 +12,7 @@ interface TodoListItemProps {
 }
 
 function TodoListItem(props:TodoListItemProps){
+    console.log(`this is todo list item component`);
     const { todo, toggleTodo, deleteTodo, editTodo } = props;
     const [isModifying, setIsModifying] = React.useState<boolean>(false);
     const [modifyText, setModifyText] = React.useState<string>(todo.text);
@@ -65,4 +65,4 @@ function TodoListItem(props:TodoListItemProps){
     );
 }
 
-export default TodoListItem;
+export default React.memo(TodoListItem);
