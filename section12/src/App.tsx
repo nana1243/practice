@@ -1,6 +1,7 @@
 import './App.css'
 import CheckBox from "./components/CheckBox";
 import {useEffect, useState} from "react";
+import ChildA from "./components/ChildA";
 
 function App() {
     const  [count,setCount] = useState(0);
@@ -23,6 +24,7 @@ function App() {
         <>
             <h1>Count : {count}</h1>
             <button onClick={() => setCount(count + 1)}>Click Me</button>
+            <ChildA/>
         </>
   )
 }
