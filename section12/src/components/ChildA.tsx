@@ -2,13 +2,13 @@ import React from 'react';
 import ChildB from "./ChildB";
 
 interface ChildAProps {
-    count: number;
+    increment: () => void;
 }
 
 function ChildA(props :ChildAProps) {
-    const { count } = props;
     console.log('Child A rendered');
-    console.log('Child A props:', count);
+    const { increment } = props;
+
     return (
         <>
             <h1>Child A</h1>
