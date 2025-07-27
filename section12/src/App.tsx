@@ -1,6 +1,8 @@
 import './App.css'
-import {useCallback, useEffect, useMemo, useState} from "react";
-// import ChildA from "./components/ChildA";
+import React, {useCallback, useEffect, useMemo, useState, Suspense} from "react";
+
+const ChildA = React.lazy(() => import('./components/ChildA'));
+const ChildC = React.lazy(() => import('./components/ChildC'));
 
 const initialItems = new Array(29_999_999).fill(0).map((_, index) => {
     return {
@@ -11,6 +13,7 @@ const initialItems = new Array(29_999_999).fill(0).map((_, index) => {
 
 function App() {
     const  [count,setCount] = useState(0);
+    const [isShow, setIsShow] = useState(false);
 
     // 연산비용이 높음
     // const selectedItems = initialItems.find(item => item.selected);
@@ -47,9 +50,20 @@ function App() {
     return (
         <>
             <h1>Count : {count}</h1>
-            <button onClick={incrementCountV2}>Click Me</button>
-            <p>selected : {selectedItems.id}</p>
-            {/*<ChildA increment={incrementCountV2}/>*/}
+            <button onClick={()=> setIsShow(!isShow)}>Click Me</button>
+            {/*<p>selected : {selectedItems.id}</p>*/}
+            {isShow && (
+                <>
+                    <Suspense fallback={<div>Loading ChildA...</div>}>
+                        <ChildA increment={incrementCountV2}/>
+                    </Suspense>
+
+                    <Suspense fallback={<div>Loading ChildC...</div>}>
+                        <ChildC />
+                    </Suspense>
+                </>
+            )}
+
         </>
   )
 }

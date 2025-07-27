@@ -1,5 +1,5 @@
 import React from 'react';
-import ChildB from "./ChildB";
+// import ChildB from "./ChildB";
 
 interface ChildAProps {
     increment: () => void;
@@ -12,7 +12,7 @@ function ChildA(props :ChildAProps) {
     return (
         <>
             <h1>Child A</h1>
-            <ChildB/>
+            {/*<ChildB/>*/}
         </>
     );
 }
