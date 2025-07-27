@@ -8,7 +8,7 @@ function CountButton() {
 
     return (
         <>
-            <button onClick={increase}> increase </button>
+            <button onClick={() => increase(5)}> increase + 5 </button>
             <button onClick={decrease}> decrease </button>
             <button onClick={reset}> reset </button>
         </>
