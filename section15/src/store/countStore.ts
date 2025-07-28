@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {createJSONStorage, persist, subscribeWithSelector} from "zustand/middleware";
+import {createJSONStorage, devtools, persist, subscribeWithSelector} from "zustand/middleware";
 import {immer} from "zustand/middleware/immer";
 
 interface CountStore{
@@ -10,7 +10,7 @@ interface CountStore{
 }
 
 export const useCountStore = create<CountStore>(
-    subscribeWithSelector(
+    devtools(subscribeWithSelector(
         persist(
             immer((set) => ({
                 count: 0,
@@ -27,5 +27,7 @@ export const useCountStore = create<CountStore>(
                 storage: createJSONStorage(() => sessionStorage), // use sessionStorage for persistence
             }
         )
-    )
+    )),{
+        enabled: import.meta.env.MODE === 'development', // Enable devtools only if the environment variable is set
+    }
 );
