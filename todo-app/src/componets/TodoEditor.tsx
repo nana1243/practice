@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import Input from "./html/Input";
 import Button from "./html/Button";
+import {useTodoStore} from "../store/todoStore";
 
-interface TodoEditorProps {
-    addTodo: (text: string) => void;
-}
+// interface TodoEditorProps {
+//     addTodo: (text: string) => void;
+// }
 
-function TodoEditor(props:TodoEditorProps) {
-    const { addTodo } = props;
+function TodoEditor() {
+    // const { addTodo } = props;
+    const addTodo = useTodoStore((state) => state.addTodo);
+
     const [text, setText] = useState<string>('');
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {

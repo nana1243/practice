@@ -54,23 +54,23 @@ function Todo() {
     },[])
 
 
-    useEffect(()=> {
-        const randomTodos :Todo[] = Array.from(
-            {length:2000},
-            (_, index) => ({
-                id: index + 1,
-                text: `Todo ${index + 1}`,
-                completed: false
-            })
-        )
-        setTodos(randomTodos);
-    },[])
+    // useEffect(()=> {
+    //     const randomTodos :Todo[] = Array.from(
+    //         {length:2000},
+    //         (_, index) => ({
+    //             id: index + 1,
+    //             text: `Todo ${index + 1}`,
+    //             completed: false
+    //         })
+    //     )
+    //     setTodos(randomTodos);
+    // },[])
 
     return (
         <div className="todo">
             <TodoHeader/>
-            <TodoEditor addTodo={addTodo}/>
-            <TodoList todos={todos} deleteTodo={deleteTodo} toggleTodo={toggleTodo} editTodo={editTodo} />
+            <TodoEditor />
+            <TodoList  />
         </div>
     );
 }
