@@ -12,32 +12,54 @@ function Fetch() {
 
     useEffect(() => {
         const abortController = new AbortController();
-        setIsLoading(true);
-        fetch('http://localhost:3000/posts2', {
-            signal: abortController.signal,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-            .then(result => {
-                console.log('result',result)
-                if (!result.ok) {
+        const fetchPosts = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch('http://localhost:3000/posts', {
+                    signal: abortController.signal,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-                return result.json()
-            })
-            .then(data=> {
-                setPosts(data as Post[])
-            })
-            .catch(error => {
+                const data = await response.json();
+                setPosts(data as Post[]);
+            } catch (error) {
                 console.error("Error fetching posts:", error);
-            })
-            .finally(() => setIsLoading(false))
-        return () => {
-            abortController.abort();
-            setIsLoading(false);
+            } finally {
+                setIsLoading(false);
+            }
         }
+        fetchPosts()
+        // setIsLoading(true);
+        // fetch('http://localhost:3000/posts2', {
+        //     signal: abortController.signal,
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json'
+        //     }
+        // })
+        //     .then(result => {
+        //         console.log('result',result)
+        //         if (!result.ok) {
+        //             throw new Error("Network response was not ok");
+        //         }
+        //         return result.json()
+        //     })
+        //     .then(data=> {
+        //         setPosts(data as Post[])
+        //     })
+        //     .catch(error => {
+        //         console.error("Error fetching posts:", error);
+        //     })
+        //     .finally(() => setIsLoading(false))
+        // return () => {
+        //     abortController.abort();
+        //     setIsLoading(false);
+        // }
     },[])
 
     return (
