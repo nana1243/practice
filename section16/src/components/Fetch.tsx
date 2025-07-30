@@ -11,8 +11,15 @@ function Fetch() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        const abortController = new AbortController();
         setIsLoading(true);
-        fetch('http://localhost:3000/posts2')
+        fetch('http://localhost:3000/posts2', {
+            signal: abortController.signal,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then(result => {
                 console.log('result',result)
                 if (!result.ok) {
@@ -27,7 +34,10 @@ function Fetch() {
                 console.error("Error fetching posts:", error);
             })
             .finally(() => setIsLoading(false))
-
+        return () => {
+            abortController.abort();
+            setIsLoading(false);
+        }
     },[])
 
     return (
