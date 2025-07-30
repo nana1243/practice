@@ -526,9 +526,14 @@
       "id": 5,
       "postId": 5,
       "text": "Comment #5 on Post #5"
+    },
+    {
+      "id": 6,
+      "postId": 6,
+      "text": "This is a new comment"
     }
   ],
-  "profile" : {
-    "name" : "typicode"
+  "profile": {
+    "name": "typicode"
   }
 }

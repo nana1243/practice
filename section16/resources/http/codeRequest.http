@@ -1,0 +1,16 @@
+### GET /posts
+http://localhost:3000/posts
+
+
+### GET /comments
+http://localhost:3000/comments
+
+### POST/comments
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "id": 6,
+  "postId": 6,
+  "text": "This is a new comment"
+}
