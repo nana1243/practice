@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-// import Fetch from "./components/Fetch";
-// import FetchCrud from "./components/FetchCrud";
-import AxiosCrud from "./components/AxiosCrud";
+import Axios from "./components/Axios";
 
 function App() {
 
@@ -10,7 +8,8 @@ function App() {
     <>
         {/*<Fetch/>*/}
         {/*<FetchCrud/>*/}
-        <AxiosCrud/>
+        {/*<AxiosCrud/>*/}
+        <Axios/>
     </>
   )
 }
