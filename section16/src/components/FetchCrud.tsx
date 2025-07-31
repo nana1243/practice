@@ -21,9 +21,45 @@ function FetchCrud() {
         const data = await response.json();
         console.log(data);
     }
-    const onClickPut = async () => {}
-    const onClickDelete = async () => {}
-    const onClickPatch = async () => {}
+    const onClickPut = async () => {
+        const postData = {
+            "title": "Changed Post #2",
+            "views": 2
+        }
+        const response = await fetch('http://localhost:3000/posts/100', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postData)
+        });
+        const data = await response.json();
+        console.log(data);
+    }
+    const onClickDelete = async () => {
+        const response = await fetch('http://localhost:3000/posts/100', {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            console.log("Post deleted successfully");
+        } else {
+            console.error("Failed to delete post");
+        }
+    }
+    const onClickPatch = async () => {
+        const postData = {
+            "views": 1002
+        }
+        const response = await fetch('http://localhost:3000/posts/100', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postData)
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 
     return (
         <>
