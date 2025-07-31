@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from "axios";
+import {axiosInstance} from "../api/axios";
 
 interface Post {
     id: number;
@@ -16,7 +17,7 @@ function Axios() {
         const fetchPosts = async () => {
             setIsLoading(true);
             try {
-                const {data} = await axios('http://localhost:3000/posts', {
+                const {data} = await axiosInstance('/posts', {
                     signal: abortController.signal,
                 });
                 setPosts(data as Post[]);
