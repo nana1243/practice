@@ -500,5 +500,40 @@
       "title": "Post #100",
       "views": 497
     }
-  ]
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "text": "Comment #1 on Post #1"
+    },
+    {
+      "id": 2,
+      "postId": 2,
+      "text": "Comment #2 on Post #2"
+    },
+    {
+      "id": 3,
+      "postId": 3,
+      "text": "Comment #3 on Post #3"
+    },
+    {
+      "id": 4,
+      "postId": 4,
+      "text": "Comment #4 on Post #4"
+    },
+    {
+      "id": 5,
+      "postId": 5,
+      "text": "Comment #5 on Post #5"
+    },
+    {
+      "id": 6,
+      "postId": 6,
+      "text": "This is a new comment"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
 }
