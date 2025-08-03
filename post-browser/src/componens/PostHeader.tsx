@@ -4,10 +4,16 @@ import {usePostStore} from "../store/usePostStore";
 function PostHeader() {
     const setLimit = usePostStore((state) => state.setLimit);
     const limit = usePostStore((state) => state.limit);
+    const term = usePostStore((state) => state.term);
+    const setTerm = usePostStore((state) => state.setTerm);
 
     const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {value} = event.target;
         setLimit(Number(value));
+    }
+    const handleSetTerm = (event) => {
+        const {value} = event.target;
+        setTerm(value);
     }
 
 
@@ -51,6 +57,8 @@ function PostHeader() {
                     type="text"
                     placeholder="Search posts by title..."
                     className="block w-full rounded-md border-0 py-3 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm"
+                    onChange={handleSetTerm}
+                    value={term}
                 />
             </div>
         </div>
