@@ -3,18 +3,20 @@ import PostCard from "./PostCard";
 import axios from "../api/axios";
 import LoadingState from "./LoadingState";
 import ErrorState from "./ErrorState";
+import {usePostStore} from "../store/usePostStore";
 
 function PostList() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const currentPage = usePostStore((state) => state.currentPage);
 
     useEffect(()=> {
         const fetchPosts = async () => {
             try {
                 setLoading(true);
-                const {data} = await axios.get('/posts');
-                setPosts(data);
+                const {data} = await axios.get(`/posts?_page=${currentPage}&_per_page=10`);
+                setPosts(data.data);
             }catch (e) {
                 setError(e instanceof Error ? e.message : 'An unexpected error occurred');
                 console.error('Error fetching posts:', e);
@@ -23,7 +25,7 @@ function PostList() {
             }
         }
         fetchPosts();
-    },[])
+    },[currentPage])
 
     return (
         <div className="mb-8">
