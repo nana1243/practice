@@ -10,12 +10,13 @@ function PostList() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const currentPage = usePostStore((state) => state.currentPage);
+    const limit = usePostStore((state) => state.limit);
 
     useEffect(()=> {
         const fetchPosts = async () => {
             try {
                 setLoading(true);
-                const {data} = await axios.get(`/posts?_page=${currentPage}&_per_page=10`);
+                const {data} = await axios.get(`/posts?_page=${currentPage}&_per_page=${limit}`);
                 setPosts(data.data);
             }catch (e) {
                 setError(e instanceof Error ? e.message : 'An unexpected error occurred');
@@ -25,7 +26,7 @@ function PostList() {
             }
         }
         fetchPosts();
-    },[currentPage])
+    },[currentPage,limit])
 
     return (
         <div className="mb-8">
