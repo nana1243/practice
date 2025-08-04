@@ -10,7 +10,7 @@ function UseActionComponent(props) {
         <>
             <form action={formAction}>
                 <h1>Count : {count}</h1>
-                <button type="submit">증가</button>
+                <button type="submit" disabled={isPending}>증가</button>
             </form>
         </>
     );
