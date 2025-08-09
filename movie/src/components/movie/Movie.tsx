@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import MovieHeader from "./MovieHeader";
 import MovieMain from "./MovieMain";
 import MovieList from "./MovieList";
+import MovieLoader from "./MovieLoader";
 import axiosInstant from "../../api/axios";
-import {useInView} from "react-intersection-observer";
+import { useInView } from "react-intersection-observer";
+
 
 function Movie() {
     const [nowData, setNowData] = useState([]);
@@ -12,9 +14,9 @@ function Movie() {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
 
-    const {ref} = useInView({
+    const { ref } = useInView({
         threshold: 0.5,
-        triggerOnce: false, // 이 부분을 false로 변경
+        triggerOnce: false, // 무한 스크롤을 위해 false로 설정
         rootMargin: '200px',
         onChange: (inView) => {
             console.log('this is inView:', inView, 'nowLoading:', nowLoading, 'hasMore:', hasMore, 'page:', page);
@@ -25,38 +27,41 @@ function Movie() {
         }
     });
 
-    // Fetching now playing movies from the API
-    useEffect(()=>{
-        const fetchCategories = async () => {
-            try{
-                setNowLoading(true);
-                // 💡 문제 해결: 응답 객체에서 data를 먼저 추출한 뒤, 그 안의 total_pages와 results를 구조 분해
-                const response = await axiosInstant.get(`now_playing?page=${page}`);
-                const { results, total_pages } = response.data;
+    const fetchCategories = async () => {
+        try {
+            setNowLoading(true);
+            const response = await axiosInstant.get(`now_playing?page=${page}`);
+            const { results, total_pages } = response.data;
 
-                // 💡 초기에 영화 데이터가 없는 경우를 고려하여 조건문 수정
-                if (page === 1) {
-                    setNowData(results);
-                } else {
-                    setNowData(prev => [...prev, ...results]);
-                }
-                setHasMore(total_pages > page);
-            }catch (e) {
-                setNowError(e);
-            }
-            finally {
-                setNowLoading(false);
-            }
+            // 페이지가 1일 때는 새로운 데이터를 설정하고, 아니면 기존 데이터에 추가
+            setNowData(prev => page === 1 ? results : [...prev, ...results]);
+
+            setHasMore(total_pages > page);
+        } catch (e) {
+            setNowError(e);
+        } finally {
+            setNowLoading(false);
         }
+    };
+
+    // `page` 상태가 변경될 때마다 데이터를 가져오는 useEffect
+    useEffect(() => {
         fetchCategories();
-    },[page])
+    }, [page]);
 
     return (
         <>
             <MovieHeader/>
             <MovieMain/>
-            <MovieList title="Now Playing" movies={nowData} error={nowError}/>
-            <div ref={ref}></div>
+            {/* 💡 `Suspense`를 사용해 초기 로딩만 처리. 무한 스크롤은 `nowLoading` 상태로 처리. */}
+            <Suspense fallback={<MovieLoader />}>
+                <MovieList title="Now Playing" movies={nowData} error={nowError}/>
+            </Suspense>
+            <div ref={ref} style={{ height: '50px' }}>
+                {/* 💡 로딩 중일 때 로딩 스피너를 보여줌 */}
+                {nowLoading && hasMore && <MovieLoader />}
+                {!hasMore && <div>마지막 페이지입니다.</div>}
+            </div>
         </>
     );
 }

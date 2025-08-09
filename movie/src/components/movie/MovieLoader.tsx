@@ -2,7 +2,7 @@ import React from 'react';
 
 function MovieLoader(props) {
     return (
-        <div></div>
+        <div>Loading....</div>
     );
 }
 
