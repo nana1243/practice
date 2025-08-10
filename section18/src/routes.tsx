@@ -7,6 +7,7 @@ import About from "./pages/About";
 import DashBoardHome from "./pages/dashboard/DashBoardHome";
 import DashboardSettings from "./pages/dashboard/DashboardSettings";
 import DashBoard from "./pages/dashboard/DashBoard";
+import Layout from "./components/layout/Layout";
 
 /*
 * 라우터 객체 : createBrowserRouter를 통해 생성된 라우터 인스턴스 객체
@@ -14,27 +15,32 @@ import DashBoard from "./pages/dashboard/DashBoard";
 * */
 const router = createBrowserRouter([
     {
-        path: "/",
-        Component: Home,
-    },
-    {
-        path: "/about",
-        Component: About,
-    },
-    {
-        path: "/dashboard",
-        Component: DashBoard,
-        children:[
+      Component: Layout,
+        children: [
             {
-                path : '',
-                Component: DashBoardHome,
+                path: "/",
+                Component: Home,
             },
             {
-                path: "settings",
-                Component: DashboardSettings
+                path: "/about",
+                Component: About,
+            },
+            {
+                path: "/dashboard",
+                Component: DashBoard,
+                children:[
+                    {
+                        path : '',
+                        Component: DashBoardHome,
+                    },
+                    {
+                        path: "settings",
+                        Component: DashboardSettings
+                    }
+                ]
             }
         ]
-    }
+    },
 ]);
 
 
