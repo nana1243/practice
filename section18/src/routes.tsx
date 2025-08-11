@@ -10,7 +10,6 @@ import DashBoard from "./pages/dashboard/DashBoard";
 import Layout from "./components/layout/Layout";
 import Post from "./pages/Post";
 import PostDetail from "./pages/PostDetail";
-import AboutHidden from "./pages/AboutHidden";
 
 /*
 * 라우터 객체 : createBrowserRouter를 통해 생성된 라우터 인스턴스 객체
