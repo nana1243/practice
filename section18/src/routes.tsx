@@ -8,6 +8,8 @@ import DashBoardHome from "./pages/dashboard/DashBoardHome";
 import DashboardSettings from "./pages/dashboard/DashboardSettings";
 import DashBoard from "./pages/dashboard/DashBoard";
 import Layout from "./components/layout/Layout";
+import Post from "./pages/Post";
+import PostDetail from "./pages/PostDetail";
 
 /*
 * 라우터 객체 : createBrowserRouter를 통해 생성된 라우터 인스턴스 객체
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
             {
                 path: "/about",
                 Component: About,
+            },
+            {
+                path: "/post/:id",
+                Component: Post,
+            },
+            {
+                path: "/post/:id/detail/:detail",
+                Component: PostDetail,
             },
             {
                 path: "/dashboard",
