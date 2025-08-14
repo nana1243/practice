@@ -1,65 +1,88 @@
-const mongoose = require("mongoose");
+const { putItem, getItem, updateItem, deleteItem } = require('../config/db');
+const { v4: uuidv4 } = require('uuid');
+const { QueryCommand } = require("@aws-sdk/lib-dynamodb");
 
-const userSchema = new mongoose.Schema(
-  {
-    // 카카오 로그인 시 저장되는 고유 ID (없어도 가입 가능하도록 sparse 설정)
-    kakaoId: {
-      type: String,
-    },
+const TABLE_NAME = "Users";
 
-    // 일반 로그인 및 이메일 업데이트용
-    email: {
-      type: String,
-      unique: true,
-      sparse: true,
-      trim: true,
-      lowercase: true,
-    },
+const createUser = async (userData) => {
+    const userId = uuidv4();
+    const now = new Date().toISOString();
 
-    // 회원 프로필 이미지 URL
-    profileImage: {
-      type: String,
-    },
+    const item = {
+        userId,
+        ...userData,
+        createdAt: now,
+        updatedAt: now,
+        refreshTokens: [],
+    };
 
-    // 사용자 닉네임
-    nickname: {
-      type: String,
-      required: true,
-    },
+    await putItem(TABLE_NAME, item);
+    return item;
+};
 
-    // bcrypt로 해싱된 비밀번호 (소셜 로그인만 사용할 경우 필요없음)
-    password: {
-      type: String,
-      required: function () {
-        // kakaoId가 없을 때만 비밀번호 필요
-        return !this.kakaoId;
-      },
-    },
+const getUserById = async (userId) => {
+    return await getItem(TABLE_NAME, { userId });
+};
 
-    // 발급된 리프레시 토큰들
-    refreshTokens: {
-      type: [String],
-      default: [],
-    },
-  },
-  {
-    timestamps: true, // createdAt, updatedAt 자동 추가
-  }
-);
-userSchema.index(
-  { kakaoId: 1 },
-  {
-    unique: true,
-    partialFilterExpression: { kakaoId: { $type: "string" } },
-  }
-);
+const getUserByKakaoId = async (kakaoId) => {
+    const params = {
+        TableName: TABLE_NAME,
+        IndexName: 'kakaoId-index',
+        KeyConditionExpression: 'kakaoId = :kakaoId',
+        ExpressionAttributeValues: {
+            ':kakaoId': kakaoId
+        }
+    };
 
-// email 도 마찬가지로
-userSchema.index(
-  { email: 1 },
-  {
-    unique: true,
-    partialFilterExpression: { email: { $type: "string" } },
-  }
-);
-module.exports = mongoose.model("User", userSchema);
+    const command = new QueryCommand(params);
+    // const { Items } = await docClient.send(command);
+    const {Items} = await getItem(TABLE_NAME, params)
+    return Items.length > 0 ? Items[0] : null;
+}
+
+const getUserByEmail = async (email) => {
+    const params = {
+        TableName: TABLE_NAME,
+        IndexName: 'email-index',
+        KeyConditionExpression: 'email = :email',
+        ExpressionAttributeValues: {
+            ':email': email
+        }
+    };
+    const {Items} = await getItem(TABLE_NAME, params)
+    return Items.length > 0 ? Items[0] : null;
+};
+
+const updateUser = async (userId, userData) => {
+    const now = new Date().toISOString();
+    userData.updatedAt = now;
+
+    let updateExpression = 'set ';
+    let expressionAttributeValues = {};
+    let expressionAttributeNames = {};
+    let i = 0;
+    for (const key in userData) {
+        const placeholder = `:val${i}`;
+        const attributeKey = `#key${i}`;
+        updateExpression += `${attributeKey} = ${placeholder}, `;
+        expressionAttributeValues[placeholder] = userData[key];
+        expressionAttributeNames[attributeKey] = key;
+        i++;
+    }
+    updateExpression = updateExpression.slice(0, -2);
+
+    return await updateItem(TABLE_NAME, { userId }, updateExpression, expressionAttributeValues, expressionAttributeNames);
+};
+
+const deleteUser = async (userId) => {
+    return await deleteItem(TABLE_NAME, { userId });
+};
+
+module.exports = {
+    createUser,
+    getUserById,
+    getUserByEmail,
+    getUserByKakaoId,
+    updateUser,
+    deleteUser,
+};

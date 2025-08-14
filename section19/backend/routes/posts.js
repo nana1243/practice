@@ -6,71 +6,9 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const { faker } = require("@faker-js/faker");
 
-// 전체 조회
-// [GET] /posts
-// 쿼리파라미터:
-//  - sort: 'newest' | 'views' (없으면 기본 정렬 없음(등록순))
-//  - category: 문자열 (없으면 전체 카테고리)
-//  - limit: 숫자 (optional, 페이징용)
-//  - skip: 숫자  (optional, 페이징용)
-// [GET] /posts?sort=newest|views&category=...&limit=...&skip=...&page=...&perPage=...
 router.get("/", async (req, res) => {
   try {
-    let { sort, category, limit, skip, page, perPage } = req.query;
-
-    // 1) 필터
-    const filter = {};
-    if (category) {
-      filter.category = category;
-    }
-
-    // 2) 정렬
-    const sortOption = {};
-    if (sort === "newest") {
-      sortOption.createdAt = -1;
-    } else if (sort === "views") {
-      sortOption.viewCount = -1;
-    }
-
-    // 3) 페이징 계산
-    let lim = null;
-    let skp = null;
-
-    if (page != null && perPage != null) {
-      // page는 1부터 시작
-      const p = parseInt(page, 10);
-      const pp = parseInt(perPage, 10);
-      if (!isNaN(p) && !isNaN(pp) && p > 0 && pp > 0) {
-        lim = pp;
-        skp = (p - 1) * pp;
-      }
-    } else {
-      // 기존 limit/skip 옵션
-      if (limit != null) {
-        lim = parseInt(limit, 10);
-      }
-      if (skip != null) {
-        skp = parseInt(skip, 10);
-      }
-    }
-
-    // 4) 쿼리 빌드
-    let query = Post.find(filter)
-      .populate("author", "nickname profileImage")
-      .populate("comments.author", "nickname profileImage")
-      .lean();
-
-    if (Object.keys(sortOption).length) {
-      query = query.sort(sortOption);
-    }
-    if (lim != null && !isNaN(lim)) {
-      query = query.limit(lim);
-    }
-    if (skp != null && !isNaN(skp)) {
-      query = query.skip(skp);
-    }
-
-    const posts = await query;
+    const posts = await Post.getPosts();
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -116,7 +54,7 @@ router.get("/overview", async (req, res) => {
 });
 
 // 단일 조회 & 조회수 증가
-router.get("/:id", async (req, res) => {
+router.get(":id", async (req, res) => {
   try {
     // 1) 해당 글을 viewCount + 1 한 채로 가져오기 (new: true → 업데이트된 문서 반환)
     const post = await Post.findByIdAndUpdate(

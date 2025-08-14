@@ -1,9 +1,15 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, GetCommand, PutCommand, ScanCommand, UpdateCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
-// DynamoDB 클라이언트 생성 및 설정
-const client = new DynamoDBClient({ region: "your-region" }); // AWS 리전 설정
-const docClient = DynamoDBDocumentClient.from(client); // Document Client로 변환
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const docClient = DynamoDBDocumentClient.from(client);
 
 // DynamoDB에 아이템을 추가하는 함수
 const putItem = async (tableName, item) => {
@@ -17,7 +23,6 @@ const putItem = async (tableName, item) => {
     return response;
   } catch (error) {
     console.error("Error putting item:", error);
-    // 재시도 로직을 포함하여 오류 처리를 할 수 있습니다.
     throw error;
   }
 };
@@ -38,15 +43,61 @@ const getItem = async (tableName, key) => {
   }
 };
 
-// 사용 예시
-const run = async () => {
-  const myItem = {
-    id: "123",
-    name: "John Doe",
-    email: "john.doe@example.com"
-  };
-  await putItem("MyTable", myItem);
-  await getItem("MyTable", { id: "123" });
+// DynamoDB에서 모든 아이템을 스캔하는 함수
+const scanItems = async (tableName) => {
+  const command = new ScanCommand({
+    TableName: tableName,
+  });
+  try {
+    const response = await docClient.send(command);
+    console.log("Items scanned successfully:", response.Items);
+    return response.Items;
+  } catch (error) {
+    console.error("Error scanning items:", error);
+    throw error;
+  }
 };
 
-run();
+// DynamoDB 아이템을 업데이트하는 함수
+const updateItem = async (tableName, key, updateExpression, expressionAttributeValues) => {
+  const command = new UpdateCommand({
+    TableName: tableName,
+    Key: key,
+    UpdateExpression: updateExpression,
+    ExpressionAttributeValues: expressionAttributeValues,
+    ReturnValues: "ALL_NEW",
+  });
+  try {
+    const response = await docClient.send(command);
+    console.log("Item updated successfully:", response.Attributes);
+    return response.Attributes;
+  } catch (error) {
+    console.error("Error updating item:", error);
+    throw error;
+  }
+};
+
+// DynamoDB에서 아이템을 삭제하는 함수
+const deleteItem = async (tableName, key) => {
+  const command = new DeleteCommand({
+    TableName: tableName,
+    Key: key,
+  });
+  try {
+    const response = await docClient.send(command);
+    console.log("Item deleted successfully:", response);
+    return response;
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    throw error;
+  }
+};
+
+
+module.exports = {
+  putItem,
+  getItem,
+  scanItems,
+  updateItem,
+  deleteItem
+};

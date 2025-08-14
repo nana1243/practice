@@ -2,13 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
-const { initDB } = require("./config/db");
 const corsMiddleware = require("./middlewares/cors");
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
 
 const app = express();
-initDB(); // MongoDB 연결
 
 // const RESPONSE_DELAY_MS = parseInt(process.env.RESPONSE_DELAY_MS, 10) || 1000;
 // app.use((req, res, next) => {
