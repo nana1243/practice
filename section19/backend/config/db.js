@@ -59,12 +59,13 @@ const scanItems = async (tableName) => {
 };
 
 // DynamoDB 아이템을 업데이트하는 함수
-const updateItem = async (tableName, key, updateExpression, expressionAttributeValues) => {
+const updateItem = async (tableName, key, updateExpression, expressionAttributeValues, expressionAttributeNames) => {
   const command = new UpdateCommand({
     TableName: tableName,
     Key: key,
     UpdateExpression: updateExpression,
     ExpressionAttributeValues: expressionAttributeValues,
+    ExpressionAttributeNames: expressionAttributeNames,
     ReturnValues: "ALL_NEW",
   });
   try {

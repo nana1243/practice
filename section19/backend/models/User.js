@@ -1,8 +1,7 @@
 const { putItem, getItem, updateItem, deleteItem } = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
-const { QueryCommand } = require("@aws-sdk/lib-dynamodb");
 
-const TABLE_NAME = "Users";
+const TABLE_NAME = "User";
 
 const createUser = async (userData) => {
     const userId = uuidv4();
@@ -20,11 +19,13 @@ const createUser = async (userData) => {
     return item;
 };
 
-const getUserById = async (userId) => {
-    return await getItem(TABLE_NAME, { userId });
+
+const getUserById = async ({userId, refreshToken}) => {
+    return await getItem(TABLE_NAME, { userId, refreshToken });
 };
 
 const getUserByKakaoId = async (kakaoId) => {
+    let Items = null;
     const params = {
         TableName: TABLE_NAME,
         IndexName: 'kakaoId-index',
@@ -34,10 +35,13 @@ const getUserByKakaoId = async (kakaoId) => {
         }
     };
 
-    const command = new QueryCommand(params);
-    // const { Items } = await docClient.send(command);
-    const {Items} = await getItem(TABLE_NAME, params)
-    return Items.length > 0 ? Items[0] : null;
+    try {
+        Items = await getItem(TABLE_NAME, params);
+
+    }catch (error) {
+        console.error('this is error', error);
+    }
+    return Items && Items.length>0 ? Items[0] : null;
 }
 
 const getUserByEmail = async (email) => {
@@ -55,23 +59,36 @@ const getUserByEmail = async (email) => {
 
 const updateUser = async (userId, userData) => {
     const now = new Date().toISOString();
-    userData.updatedAt = now;
+    const updateData = { ...userData, updatedAt: now };
 
-    let updateExpression = 'set ';
-    let expressionAttributeValues = {};
-    let expressionAttributeNames = {};
-    let i = 0;
-    for (const key in userData) {
-        const placeholder = `:val${i}`;
-        const attributeKey = `#key${i}`;
-        updateExpression += `${attributeKey} = ${placeholder}, `;
-        expressionAttributeValues[placeholder] = userData[key];
-        expressionAttributeNames[attributeKey] = key;
-        i++;
-    }
-    updateExpression = updateExpression.slice(0, -2);
+    let updateExpression = 'SET ';
+    const expressionAttributeValues = {};
+    const expressionAttributeNames = {};
 
-    return await updateItem(TABLE_NAME, { userId }, updateExpression, expressionAttributeValues, expressionAttributeNames);
+    const updateExpressions = Object.entries(updateData).map(([key, value], index) => {
+        const keyPlaceholder = `#${key}`;
+        const valuePlaceholder = `:${key}`;
+
+        expressionAttributeNames[keyPlaceholder] = key;
+        expressionAttributeValues[valuePlaceholder] = value;
+
+        return `${keyPlaceholder} = ${valuePlaceholder}`;
+    });
+
+    updateExpression += updateExpressions.join(', ');
+
+    console.log('updateExpression', updateExpression);
+    console.log('expressionAttributeValues', expressionAttributeValues);
+    console.log('expressionAttributeNames', expressionAttributeNames);
+
+    // 수정된 updateItem 호출 부분
+    return await updateItem(
+        TABLE_NAME,
+        { userId },
+        updateExpression,
+        expressionAttributeValues,
+        expressionAttributeNames
+    );
 };
 
 const deleteUser = async (userId) => {

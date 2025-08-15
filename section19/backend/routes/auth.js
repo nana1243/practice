@@ -26,7 +26,10 @@ router.get("/kakao", async (req, res) => {
   if (rt) {
     try {
       const { uid } = verify(rt);
-      const user = await User.findOne({ _id: uid, refreshTokens: rt });
+      const user = await User.getUserById({
+        userId : uid,
+        refreshToken: rt,
+      })
       if (user) {
         // 새 액세스/리프레시 토큰 발급
         const access = signAccess(uid);
@@ -87,34 +90,36 @@ router.get("/kakao/callback", async (req, res) => {
       },
     }
   );
+  console.log("카카오 액세스 토큰 응답:", tokenRes.data);
 
   // 카카오 사용자 정보 조회
   const kakaoUser = await axios.get("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: `Bearer ${tokenRes.data.access_token}` },
   });
-
+    console.log("카카오 사용자 정보 응답:", kakaoUser.data);
   const kakaoId = String(kakaoUser.data.id);
   const { profile } = kakaoUser.data.kakao_account;
 
   // 사용자 조회 또는 생성
-  let user = await User.findOne({ kakaoId });
+  let user = await User.getUserByKakaoId(kakaoId);
   if (!user) {
     const seed = Math.random().toString(36).substring(2, 12);
     const profileImage =
       profile.profile_image_url ||
       `https://gravatar.com/avatar/${seed}?d=identicon`;
-    user = await User.create({
-      kakaoId,
+    user = await User.createUser({
+      userId : kakaoId,
       nickname: profile.nickname,
       profileImage,
     });
+    console.log('새로운 사용자 생성:', user);
   }
 
   // JWT 발급
-  const access = signAccess(user._id);
-  const refresh = signRefresh(user._id);
+  const access = signAccess(user.userId);
+  const refresh = signRefresh(user.userId);
   user.refreshTokens.push(refresh);
-  await user.save();
+  await User.updateUser(user.userId, { refreshTokens: user.refreshTokens });
 
   // 리프레시 토큰 쿠키 저장
   res.cookie("refresh_token", refresh, {
@@ -139,7 +144,10 @@ router.post("/refresh", async (req, res) => {
 
   try {
     const { uid } = verify(rt);
-    const user = await User.findOne({ _id: uid, refreshTokens: rt });
+    const user = await User.getUserById({
+        userId: uid,
+        refreshToken: rt,
+    })
     if (!user) throw new Error();
 
     const access = signAccess(uid);
@@ -223,7 +231,7 @@ router.post("/signup", async (req, res) => {
       .json({ error: "이메일, 닉네임, 비밀번호는 필수입니다" });
   }
 
-  if (await User.findOne({ email })) {
+  if (await User.getUserByEmail(email)) {
     return res.status(409).json({ error: "이미 사용 중인 이메일입니다" });
   }
 
@@ -231,7 +239,7 @@ router.post("/signup", async (req, res) => {
   const seed = Math.random().toString(36).substring(2, 12);
   const profileImage = `https://gravatar.com/avatar/${seed}?d=identicon`;
 
-  const user = await User.create({
+  const user = await User.createUser({
     email,
     nickname,
     password: hashed,
@@ -253,7 +261,7 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ error: "이메일과 비밀번호는 필수입니다" });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.getUserByEmail( email );
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ error: "인증 정보가 일치하지 않습니다" });
   }
