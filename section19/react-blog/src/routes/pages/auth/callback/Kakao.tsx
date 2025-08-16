@@ -1,12 +1,31 @@
 import { Mail } from "lucide-react";
 import {useEffect, useState} from "react";
 import Redirection from "../../../../components/common/Redirection";
+import {useNavigate} from "react-router";
+import {updateEmail} from "../../../../api/auth";
 
 export default function Kakao() {
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
+  const [email, setEmail] = useState('');
   const { searchParams } = new URL(window.location.href);
   const accessToken = searchParams.get("access_token");
   const emailYn = searchParams.get("email");
+
+  const handleContinue = () =>{
+      try {
+        if(accessToken){
+          sessionStorage.setItem("access_token", accessToken);
+        }
+        const {data} = updateEmail({email});
+
+      }catch (e) {
+
+      }
+  }
+  const handleChange = (event) =>{
+    setEmail(event.target.value);
+  }
 
 
   useEffect(()=>{
@@ -47,6 +66,7 @@ export default function Kakao() {
                             className="w-full bg-slate-700 text-white pl-10 pr-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             placeholder="Enter your email"
                             autoComplete="off"
+                            onChange={handleChange}
                             required
                         />
                       </div>
@@ -56,12 +76,14 @@ export default function Kakao() {
                       <button
                           type="button"
                           className="flex-1 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                          onClick={()=> navigate(-1)}
                       >
                         Cancel
                       </button>
                       <button
                           type="submit"
                           className="flex-1 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                          onClick={handleContinue}
                       >
                         Continue
                       </button>
