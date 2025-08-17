@@ -174,8 +174,8 @@ router.post("/refresh", async (req, res) => {
  * - 인증된 사용자 프로필 반환
  */
 router.get("/me", auth, (req, res) => {
-  const { _id, kakaoId, email, profileImage, nickname } = req.user;
-  return res.json({ id: _id, kakaoId, email, profileImage, nickname });
+  const { userId, kakaoId, email, profileImage, nickname } = req.user;
+  return res.json({ id: userId, kakaoId, email, profileImage, nickname });
 });
 
 /**
@@ -188,6 +188,7 @@ router.patch("/update-email", auth, async (req, res) => {
 
   try {
     req.user.email = email;
+    console.log(`this is running in update-email route: ${req.user.email}`)
     await req.user.save();
     return res.json({
       message: "이메일이 성공적으로 업데이트되었습니다",

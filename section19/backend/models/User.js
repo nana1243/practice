@@ -77,10 +77,6 @@ const updateUser = async (userId, userData) => {
 
     updateExpression += updateExpressions.join(', ');
 
-    console.log('updateExpression', updateExpression);
-    console.log('expressionAttributeValues', expressionAttributeValues);
-    console.log('expressionAttributeNames', expressionAttributeNames);
-
     // 수정된 updateItem 호출 부분
     return await updateItem(
         TABLE_NAME,

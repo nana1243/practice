@@ -19,7 +19,6 @@ const putItem = async (tableName, item) => {
   });
   try {
     const response = await docClient.send(command);
-    console.log("Item added successfully:", response);
     return response;
   } catch (error) {
     console.error("Error putting item:", error);

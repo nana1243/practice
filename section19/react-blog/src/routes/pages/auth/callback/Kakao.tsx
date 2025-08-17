@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import Redirection from "../../../../components/common/Redirection";
 import {useNavigate} from "react-router";
 import {updateEmail} from "../../../../api/auth";
+import useAuthStore from "../../../../stores/authStore";
 
 export default function Kakao() {
   const navigate = useNavigate();
@@ -12,16 +13,26 @@ export default function Kakao() {
   const accessToken = searchParams.get("access_token");
   const emailYn = searchParams.get("email");
 
-  const handleContinue = () =>{
-      try {
-        if(accessToken){
-          sessionStorage.setItem("access_token", accessToken);
-        }
-        const {data} = updateEmail({email});
+  const setUserData = useAuthStore((state) => state.setUserData);
 
-      }catch (e) {
-
+  const handleContinue = async () => {
+    console.log(`Access Token: ${accessToken}, Email: ${email}`)
+    try {
+      if (accessToken) {
+        sessionStorage.setItem("access_token", accessToken);
       }
+      const {data} = await updateEmail({email});
+      console.log('this is data', data);
+      setUserData({
+        id: data.userId,
+        email: data.email,
+        nickname: data.nickname,
+        profileImage: data.profileImage,
+        refreshToken: data.refreshToken,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
   const handleChange = (event) =>{
     setEmail(event.target.value);

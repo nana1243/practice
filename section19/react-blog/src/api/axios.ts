@@ -6,13 +6,13 @@ const axiosInstances = axios.create({
 })
 
 axiosInstances.interceptors.request.use((config)=>{
-    const token = sessionStorage.getItem('accss_token');
-    if(token){
-        config.headers = config.headers || {};
-        config.headers.Authorization = `Bearer ${token}`
-    }
-},
+        const token = sessionStorage.getItem('access_token');
+        if(token){
+            config.headers = config.headers || {};
+            config.headers.Authorization = `Bearer ${token}`
+        }
+        return config;
+    },
     (error)=> Promise.reject(error)
 )
-
 export default axiosInstances;
