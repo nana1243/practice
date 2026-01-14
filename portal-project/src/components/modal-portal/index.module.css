@@ -1,0 +1,58 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* 반투명 검은 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 다른 요소들보다 항상 위에 */
+
+    /* 등장 애니메이션 */
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 2. 모달창 본체 */
+.modalContent {
+    background-color: white;
+    width: 400px;
+    max-width: 90%; /* 모바일 대응 */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    color: #535bf2;
+    /* 아래에서 위로 올라오는 애니메이션 */
+    animation: slideUp 0.3s ease-out;
+}
+
+/* 3. 모달 헤더/바디/푸터 (선택 사항) */
+.modalHeader {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.modalBody {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* 애니메이션 정의 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
